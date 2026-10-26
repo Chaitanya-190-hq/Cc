@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>Student Command Centre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-logo">🎓</span>
+    <div class="brand-text">
+      <h1>Command Centre</h1>
+      <p id="topbar-semester">—</p>
+    </div>
+  </div>
+  <button class="icon-btn" id="btn-semester-switch" title="Switch semester">🎓</button>
+</header>
+
+<main id="views">
+
+  <!-- ============ HOME ============ -->
+  <section class="view" id="view-home" data-view="home">
+    <div class="hero">
+      <p class="hero-hi" id="hero-greeting">Hey 👋</p>
+      <p class="hero-date" id="hero-date"></p>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card" data-goto="attendance">
+        <span class="stat-num" id="stat-attendance">—</span>
+        <span class="stat-label">Attendance</span>
+      </div>
+      <div class="stat-card" data-goto="assignments">
+        <span class="stat-num" id="stat-assignments">0</span>
+        <span class="stat-label">Pending tasks</span>
+      </div>
+      <div class="stat-card" data-goto="exams">
+        <span class="stat-num" id="stat-exams">0</span>
+        <span class="stat-label">Upcoming exams</span>
+      </div>
+      <div class="stat-card" data-goto="notes">
+        <span class="stat-num" id="stat-notes">0</span>
+        <span class="stat-label">Notes</span>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <h2>⏳ Next up</h2>
+        <button class="link-btn" data-goto="assignments">See all</button>
+      </div>
+      <div id="home-next" class="list"></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <h2>📝 Upcoming exams</h2>
+        <button class="link-btn" data-goto="exams">See all</button>
+      </div>
+      <div id="home-exams" class="list"></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <h2>🚨 Attendance alerts</h2>
+        <button class="link-btn" data-goto="attendance">See all</button>
+      </div>
+      <div id="home-attendance" class="list"></div>
+    </div>
+  </section>
+
+  <!-- ============ ATTENDANCE ============ -->
+  <section class="view" id="view-attendance" data-view="attendance" hidden>
+    <div class="page-head">
+      <h2>Attendance</h2>
+      <button class="btn btn-primary" data-add="attendance">+ Mark</button>
+    </div>
+
+    <div class="card summary-card">
+      <div class="summary-ring">
+        <span id="att-overall">—</span>
+        <small>overall</small>
+      </div>
+      <div class="summary-info">
+        <p id="att-summary-text">No records yet.</p>
+        <div class="seg" id="att-filter">
+          <button class="seg-btn active" data-filter="current">Current semester</button>
+          <button class="seg-btn" data-filter="all">All time</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="attendance-list" class="list"></div>
+  </section>
+
+  <!-- ============ ASSIGNMENTS ============ -->
+  <section class="view" id="view-assignments" data-view="assignments" hidden>
+    <div class="page-head">
+      <h2>Assignments &amp; deadlines</h2>
+      <div class="page-head-actions">
+        <button class="btn" id="btn-select-mode">Select</button>
+        <button class="btn btn-primary" data-add="assignment">+ Add</button>
+      </div>
+    </div>
+
+    <div class="seg" id="assignment-filter">
+      <button class="seg-btn active" data-filter="pending">Pending</button>
+      <button class="seg-btn" data-filter="done">Done</button>
+      <button class="seg-btn" data-filter="all">All</button>
+    </div>
+
+    <div id="assignment-list" class="list"></div>
+  </section>
+
+  <!-- ============ SUBJECT ANALYSIS ============ -->
+  <section class="view" id="view-analysis" data-view="analysis" hidden>
+    <div class="page-head">
+      <button class="btn btn-sm" id="btn-analysis-back">← Attendance</button>
+      <div class="page-head-actions">
+        <button class="btn btn-sm" data-edit-sub-analysis="1">✎ Edit subject</button>
+      </div>
+    </div>
+    <div id="analysis-body"></div>
+  </section>
+
+  <!-- ============ EXAMS ============ -->
+  <section class="view" id="view-exams" data-view="exams" hidden>
+    <div class="page-head">
+      <h2>Exams</h2>
+      <button class="btn btn-primary" data-add="exam">+ Add</button>
+    </div>
+
+    <div class="seg" id="exam-filter">
+      <button class="seg-btn active" data-filter="upcoming">Upcoming</button>
+      <button class="seg-btn" data-filter="past">Past</button>
+      <button class="seg-btn" data-filter="all">All</button>
+    </div>
+
+    <div id="exam-list" class="list"></div>
+  </section>
+
+  <!-- ============ SUBJECTS ============ -->
+  <section class="view" id="view-subjects" data-view="subjects" hidden>
+    <div class="page-head">
+      <h2>Subjects</h2>
+      <button class="btn btn-primary" data-add="subject">+ Add</button>
+    </div>
+    <p class="hint" id="subjects-hint">Subjects of the selected semester.</p>
+    <div id="subject-list" class="list"></div>
+
+    <div class="page-head" style="margin-top:26px">
+      <h2>Semesters</h2>
+      <button class="btn btn-primary" data-add="semester">+ Add</button>
+    </div>
+    <div id="semester-list" class="list"></div>
+  </section>
+
+  <!-- ============ LINKS ============ -->
+  <section class="view" id="view-links" data-view="links" hidden>
+    <div class="page-head">
+      <h2>Important links</h2>
+      <button class="btn btn-primary" data-add="link">+ Add</button>
+    </div>
+    <div class="search-wrap">
+      <input type="search" id="link-search" placeholder="Search links…">
+    </div>
+    <div id="link-list" class="list"></div>
+  </section>
+
+  <!-- ============ NOTES ============ -->
+  <section class="view" id="view-notes" data-view="notes" hidden>
+    <div class="page-head">
+      <h2>Notes</h2>
+      <button class="btn btn-primary" data-add="note">+ Add</button>
+    </div>
+    <div class="search-wrap">
+      <input type="search" id="note-search" placeholder="Search notes…">
+    </div>
+    <div id="note-list" class="list"></div>
+  </section>
+
+</main>
+
+<!-- ============ BOTTOM NAV ============ -->
+<nav class="bottomnav">
+  <button class="nav-btn active" data-nav="home"><span>🏠</span>Home</button>
+  <button class="nav-btn" data-nav="attendance"><span>📊</span>Attend</button>
+  <button class="nav-btn" data-nav="assignments"><span>📄</span>Tasks</button>
+  <button class="nav-btn" data-nav="exams"><span>📝</span>Exams</button>
+  <button class="nav-btn" data-nav="more"><span>⋯</span>More</button>
+</nav>
+
+<!-- ============ SELECTION BAR ============ -->
+<div class="selbar" id="selbar" hidden>
+  <span id="sel-count">0 selected</span>
+  <div class="selbar-actions">
+    <button class="btn btn-sm" id="sel-clear">Clear</button>
+    <button class="btn btn-sm btn-primary" id="sel-share">Make slip ⧉</button>
+  </div>
+</div>
+
+<!-- ============ SLIP MODAL ============ -->
+<div class="modal-backdrop" id="slip-backdrop" hidden>
+  <div class="modal slip-modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h3>Share slip</h3>
+      <button class="icon-btn" id="slip-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label for="slip-author">Your name (printed at the bottom)</label>
+        <input id="slip-author" type="text" placeholder="e.g. Priya" maxlength="40">
+      </div>
+      <div class="slip-preview"><canvas id="slip-canvas"></canvas></div>
+      <div class="modal-actions">
+        <button class="btn" id="slip-copy">⧉ Copy image</button>
+        <button class="btn" id="slip-download">⬇ Save PNG</button>
+      </div>
+      <button class="btn btn-ghost" id="slip-copy-text">Copy as text instead</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MORE SHEET ============ -->
+<div class="sheet-backdrop" id="more-backdrop" hidden>
+  <div class="sheet" id="more-sheet">
+    <div class="sheet-handle"></div>
+    <h3>More</h3>
+    <button class="sheet-item" data-nav="subjects">📚 Subjects &amp; semesters</button>
+    <button class="sheet-item" data-nav="links">🔗 Important links</button>
+    <button class="sheet-item" data-nav="notes">🗒️ Notes</button>
+    <button class="sheet-item" id="btn-export">💾 Export / backup data</button>
+    <button class="sheet-item" id="btn-import">📂 Import data</button>
+    <button class="sheet-item danger" id="btn-reset">🗑️ Reset everything</button>
+    <button class="sheet-item" id="more-close">Close</button>
+  </div>
+</div>
+
+<!-- ============ MODAL ============ -->
+<div class="modal-backdrop" id="modal-backdrop" hidden>
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h3 id="modal-title">Add</h3>
+      <button class="icon-btn" id="modal-close">✕</button>
+    </div>
+    <form id="modal-form" class="modal-body"></form>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+<input type="file" id="import-file" accept="application/json" hidden>
+
+<script src="app.js"></script>
+</body>
+</html>
