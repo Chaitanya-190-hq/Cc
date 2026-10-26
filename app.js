@@ -637,7 +637,7 @@ function drawSlip(canvas, items, author, scale = 2) {
   const padX = 22;
   const inner = W - padX * 2;
   const ctx = canvas.getContext('2d');
-  const font = (w, s) => `${w} ${s}px Inter, system-ui, sans-serif`;
+  const font = (w, s) => `${w} ${s}px "Plus Jakarta Sans", Inter, system-ui, sans-serif`;
   const foot = new Date().toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
   const TITLE_W = inner - 92;   // keeps titles clear of the status badge
   const TEXT_W = inner - 26;    // leaves room for the "01" index column
@@ -649,19 +649,19 @@ function drawSlip(canvas, items, author, scale = 2) {
 
   ctx.font = font(700, 18);
   push(28, c => {
-    c.font = font(700, 18); c.textAlign = 'center'; c.fillStyle = '#171a21';
+    c.font = font(700, 18); c.textAlign = 'center'; c.fillStyle = '#fafafa';
     c.fillText('ASSIGNMENT SLIP', W / 2, y + 19);
   });
   ctx.font = font(500, 10.5);
   push(20, c => {
-    c.font = font(500, 10.5); c.textAlign = 'center'; c.fillStyle = '#6b7280';
+    c.font = font(500, 10.5); c.textAlign = 'center'; c.fillStyle = '#a1a1aa';
     c.fillText('Student Command Centre', W / 2, y + 11);
   });
   push(17, c => drawDash(c, padX, W - padX, y + 8));
 
   const countLine = `${items.length} ASSIGNMENT${items.length === 1 ? '' : 'S'} SELECTED`;
   push(23, c => {
-    c.font = font(600, 10.5); c.textAlign = 'left'; c.fillStyle = '#2563eb';
+    c.font = font(600, 10.5); c.textAlign = 'left'; c.fillStyle = '#60a5fa';
     c.fillText(countLine, padX, y + 13);
   });
 
@@ -677,24 +677,26 @@ function drawSlip(canvas, items, author, scale = 2) {
     push(h, c => {
       const top = y + 6;
       c.textAlign = 'left';
-      c.font = font(700, 11); c.fillStyle = '#9aa3b2';
+      c.font = font(700, 11); c.fillStyle = '#71717a';
       c.fillText(String(i + 1).padStart(2, '0'), padX, top + 12);
 
       const tag = a.done ? 'DONE' : 'PENDING';
       c.font = font(700, 9);
       const tw = c.measureText(tag).width + 14;
-      c.fillStyle = a.done ? '#ecfdf3' : '#fff7ed';
+      c.fillStyle = a.done ? 'rgba(34,197,94,0.14)' : 'rgba(245,158,11,0.14)';
       roundRect(c, W - padX - tw, top, tw, 16, 5); c.fill();
-      c.fillStyle = a.done ? '#15803d' : '#b45309';
+      c.strokeStyle = a.done ? 'rgba(34,197,94,0.45)' : 'rgba(245,158,11,0.45)'; c.lineWidth = 1;
+      roundRect(c, W - padX - tw, top, tw, 16, 5); c.stroke();
+      c.fillStyle = a.done ? '#22c55e' : '#f59e0b';
       c.fillText(tag, W - padX - tw + 7, top + 11.5);
 
       let ly = top + 12;
-      c.font = font(600, 13); c.fillStyle = '#171a21';
+      c.font = font(600, 13); c.fillStyle = '#fafafa';
       titleLines.forEach(l => { c.fillText(l, padX + 26, ly); ly += 17; });
-      c.font = font(500, 10.5); c.fillStyle = '#6b7280';
+      c.font = font(500, 10.5); c.fillStyle = '#a1a1aa';
       metaLines.forEach(l => { c.fillText(l, padX + 26, ly + 1); ly += 14; });
       if (a.details) {
-        c.font = font(400, 10.5); c.fillStyle = '#9aa3b2';
+        c.font = font(400, 10.5); c.fillStyle = '#71717a';
         c.fillText('has details ✓', padX + 26, ly + 2);
       }
     });
@@ -703,14 +705,14 @@ function drawSlip(canvas, items, author, scale = 2) {
 
   const pending = items.filter(a => !a.done).length;
   push(26, c => {
-    c.textAlign = 'left'; c.font = font(700, 12); c.fillStyle = '#171a21';
+    c.textAlign = 'left'; c.font = font(700, 12); c.fillStyle = '#fafafa';
     c.fillText('TOTAL', padX, y + 17);
-    c.textAlign = 'right'; c.font = font(600, 12); c.fillStyle = '#171a21';
+    c.textAlign = 'right'; c.font = font(600, 12); c.fillStyle = '#fafafa';
     c.fillText(`${items.length - pending} done · ${pending} pending`, W - padX, y + 17);
   });
   push(16, c => drawDash(c, padX, W - padX, y + 8));
   push(16, c => {
-    c.textAlign = 'center'; c.font = font(500, 9.5); c.fillStyle = '#9aa3b2';
+    c.textAlign = 'center'; c.font = font(500, 9.5); c.fillStyle = '#71717a';
     c.fillText(foot, W / 2, y + 10);
   });
   push(14, c => drawDash(c, padX, W - padX, y + 7));
@@ -719,11 +721,11 @@ function drawSlip(canvas, items, author, scale = 2) {
   ctx.font = font(500, 10);
   const sigLines = wrapLines(ctx, author || '—', inner - 20);
   push(18, c => {
-    c.textAlign = 'center'; c.font = font(500, 10); c.fillStyle = '#6b7280';
+    c.textAlign = 'center'; c.font = font(500, 10); c.fillStyle = '#a1a1aa';
     c.fillText('shared by', W / 2, y + 11);
   });
   push(sigLines.length * 18 + 14, c => {
-    c.textAlign = 'center'; c.font = font(700, 15); c.fillStyle = '#171a21';
+    c.textAlign = 'center'; c.font = font(700, 15); c.fillStyle = '#fafafa';
     let ly = y + 16;
     sigLines.forEach(l => { c.fillText(l, W / 2, ly); ly += 18; });
   });
@@ -735,9 +737,9 @@ function drawSlip(canvas, items, author, scale = 2) {
   canvas.height = Math.round(H * scale);
   ctx.setTransform(scale, 0, 0, scale, 0, 0);
   ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = '#ffffff';
+  ctx.fillStyle = '#0c0c0f';
   roundRect(ctx, 0, 0, W, H, 10); ctx.fill();
-  ctx.strokeStyle = '#d5dae4'; ctx.lineWidth = 1;
+  ctx.strokeStyle = '#27272a'; ctx.lineWidth = 1;
   ctx.setLineDash([4, 4]);
   roundRect(ctx, 4, 4, W - 8, H - 8, 7); ctx.stroke();
   ctx.setLineDash([]);
@@ -748,7 +750,7 @@ function drawSlip(canvas, items, author, scale = 2) {
 
 function drawDash(c, x1, x2, yPos) {
   c.save();
-  c.strokeStyle = '#e4e7ee'; c.lineWidth = 1; c.setLineDash([3, 4]);
+  c.strokeStyle = 'rgba(255,255,255,0.08)'; c.lineWidth = 1; c.setLineDash([3, 4]);
   c.beginPath(); c.moveTo(x1, yPos); c.lineTo(x2, yPos); c.stroke();
   c.restore();
 }
@@ -980,7 +982,7 @@ function renderNotes() {
         <button class="btn btn-sm btn-danger" data-del-note="${n.id}" title="Delete">🗑</button>
       </div>
     </div>
-    <p style="font-size:13.8px;line-height:1.6;color:#374151;white-space:pre-wrap">${esc(n.body)}</p>
+    <p style="font-size:13.8px;line-height:1.6;color:var(--text-2);white-space:pre-wrap">${esc(n.body)}</p>
   </div>`).join('') : emptyBox('No notes yet. Save formulas, dates, important points — then share them with the ⧉ button.');
 }
 
@@ -1184,7 +1186,7 @@ function renderHome() {
         <div class="item-actions"><button class="btn btn-sm" data-mark="1" data-sub="${r.id}">✓</button></div>
       </div>
     </div>`).join('')
-    : (stats.total ? '<div class="empty" style="border-style:solid;border-color:rgba(21,128,61,.35);color:var(--green)">All subjects above 75% ✅</div>'
+    : (stats.total ? '<div class="empty" style="border-style:solid;border-color:rgba(34,197,94,.30);color:var(--green);box-shadow:0 0 22px -10px var(--green-glow)">All subjects above 75% ✅</div>'
       : emptyBox('Mark attendance to see alerts here.'));
 }
 
